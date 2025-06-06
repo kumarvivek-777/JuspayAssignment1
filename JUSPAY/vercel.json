@@ -1,10 +1,16 @@
 {
   "version": 2,
-  "public": true,
   "builds": [
-    { "src": "Assignment1.html", "use": "@vercel/static" }
+    {
+      "src": "Assignment1.html",
+      "use": "@vercel/static"
+    }
   ],
   "routes": [
-    { "src": "/.*", "dest": "/Assignment1.html" }
+    {
+      "src": "/.*",
+      "dest": "Assignment1.html"
+    }
   ]
-} 
+}
+
