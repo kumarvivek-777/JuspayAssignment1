@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Responsive Layout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-color: #94a3b8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f1f5f9;
+            transition: var(--transition);
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .navbar-brand i {
+            font-size: 1.75rem;
+        }
+        
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .navbar-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .container {
+            display: flex;
+            margin-top: 72px;
+            min-height: calc(100vh - 112px);
+        }
+        
+        .left-menu {
+            width: 280px;
+            background-color: white;
+            padding: 1.5rem;
+            transition: var(--transition);
+            overflow-y: auto;
+            box-shadow: var(--box-shadow);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .left-menu.collapsed {
+            width: 80px;
+            overflow: hidden;
+        }
+        
+        .left-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .left-menu-header h2 {
+            white-space: nowrap;
+            font-size: 1.25rem;
+            color: var(--dark-color);
+        }
+        
+        .toggle-menu {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .toggle-menu:hover {
+            background: var(--secondary-color);
+        }
+
+        .left-menu.collapsed .menu-text {
+            display: none;
+        }
+
+        .left-menu.collapsed .left-menu-header {
+            justify-content: center;
+        }
+
+        .left-menu.collapsed .left-menu-header h2 {
+            display: none;
+        }
+        
+        .menu-list {
+            list-style: none;
+        }
+        
+        .menu-item {
+            margin-bottom: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+        
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--dark-color);
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .menu-link:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-link i {
+            font-size: 1.25rem;
+            min-width: 24px;
+        }
+
+        .menu-link.active {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            margin: 0 1rem;
+            border-radius: var(--border-radius);
+        }
+        
+        .main-content h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(37, 99, 235, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+        
+        .right-panel {
+            width: 320px;
+            background-color: white;
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .right-panel h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .notification-list {
+            list-style: none;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 0.75rem;
+            background-color: rgba(241, 245, 249, 0.5);
+            transition: var(--transition);
+        }
+
+        .notification-item:hover {
+            background-color: rgba(241, 245, 249, 1);
+        }
+
+        .notification-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: var(--gray-color);
+        }
+
+        .notification-item.success .notification-icon {
+            color: var(--success-color);
+        }
+
+        .notification-item.warning .notification-icon {
+            color: var(--warning-color);
+        }
+
+        .notification-item.danger .notification-icon {
+            color: var(--danger-color);
+        }
+        
+        .footer {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            text-align: center;
+            padding: 1.5rem;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            color: var(--light-color);
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 1200px) {
+            .right-panel {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .right-panel {
+                display: none;
+            }
+
+            .left-menu {
+                width: 240px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar-toggle {
+                display: block;
+            }
+            
+            .left-menu {
+                position: fixed;
+                left: 0;
+                top: 72px;
+                bottom: 0;
+                z-index: 999;
+                transform: translateX(-100%);
+            }
+            
+            .left-menu.visible {
+                transform: translateX(0);
+            }
+            
+            .left-menu.collapsed {
+                width: 240px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+                padding: 1.5rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+        }
+
+        .scaling-overlay {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--dark-color);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1100;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-rocket"></i>
+            <span>Enhanced Layout</span>
+        </div>
+        <button class="navbar-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+    
+    <div class="container">
+        <aside class="left-menu" id="leftMenu">
+            <div class="left-menu-header">
+                <h2>Dashboard</h2>
+                <button class="toggle-menu" id="toggleMenu" title="Toggle Menu">
+                    <i class="fas fa-chevron-left menu-text"></i>
+                </button>
+            </div>
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="#" class="menu-link active">
+                        <i class="fas fa-home"></i>
+                        <span class="menu-text">Home</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span class="menu-text">Analytics</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="menu-text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-users"></i>
+                        <span class="menu-text">Customers</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-cog"></i>
+                        <span class="menu-text">Settings</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-question-circle"></i>
+                        <span class="menu-text">Help</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <h2>Welcome to Your Dashboard</h2>
+            <p>Here you can manage all aspects of your application. Get started by exploring the menu options or checking your latest notifications.</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Performance Metrics</h3>
+                    </div>
+                    <p>View your key performance indicators and track your progress over time.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>Recent Activity</h3>
+                    </div>
+                    <p>Check what's been happening in your account with our activity feed.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3>Notifications</h3>
+                    </div>
+                    <p>You have 5 new notifications waiting for your attention.</p>
+                </div>
+            </div>
+        </main>
+        
+        <aside class="right-panel">
+            <h2>Recent Notifications</h2>
+            <ul class="notification-list">
+                <li class="notification-item success">
+                    <i class="fas fa-check-circle notification-icon"></i>
+                    <div class="notification-content">
+                        <p>Your order #12345 has been shipped</p>
+                        <small class="notification-time">2 hours ago</small>
+                    </div>
+                </li>
+                <li class="notification-item warning">
+                    <i class="fas fa-exclamation-triangle notification-icon"></i>
+                    <div class="notification-content">
+                        <p>Your storage is 85% full</p>
+                        <small class="notification-time">1 day ago</small>
+                    </div>
+                </li>
+                <li class="notification-item">
+                    <i class="fas fa-info-circle notification-icon"></i>
+                    <div class="notification-content">
+                        <p>New feature available: Dark mode</p>
+                        <small class="notification-time">2 days ago</small>
+                    </div>
+                </li>
+                <li class="notification-item danger">
+                    <i class="fas fa-times-circle notification-icon"></i>
+                    <div class="notification-content">
+                        <p>Login attempt from new device</p>
+                        <small class="notification-time">3 days ago</small>
+                    </div>
+                </li>
+            </ul>
+        </aside>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2023 Enhanced Layout. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="scaling-overlay" id="scalingIndicator"></div>
+    
+    <script>
+        function handleResponsiveScaling() {
+            const screenWidth = window.innerWidth;
+            const body = document.body;
+            const scalingIndicator = document.getElementById('scalingIndicator');
+            
+            body.style.transform = '';
+            body.style.width = '';
+            body.style.margin = '0 auto';
+            
+            let scaleMessage = 'No scaling applied';
+            
+            if (screenWidth >= 992 && screenWidth <= 1600) {
+                body.style.transform = 'scale(0.9)';
+                body.style.transformOrigin = 'top center';
+                body.style.margin = '0 auto';
+                scaleMessage = 'Scaled to 90%';
+            } else if (screenWidth >= 700 && screenWidth <= 767) {
+                body.style.transform = 'scale(0.8)';
+                body.style.transformOrigin = 'top center';
+                body.style.margin = '0 auto';
+                scaleMessage = 'Scaled to 80%';
+            } else if (screenWidth >= 600 && screenWidth <= 700) {
+                body.style.width = '75%';
+                body.style.margin = '0 auto';
+                scaleMessage = 'Width set to 75%';
+            } else if (screenWidth <= 600) {
+                body.style.width = '50%';
+                body.style.margin = '0 auto';
+                scaleMessage = 'Width set to 50%';
+            }
+            
+            scalingIndicator.textContent = `${scaleMessage} (${screenWidth}px)`;
+            scalingIndicator.style.display = 'block';
+            setTimeout(() => {
+                scalingIndicator.style.display = 'none';
+            }, 2000);
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleMenuBtn = document.getElementById('toggleMenu');
+            const leftMenu = document.getElementById('leftMenu');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            
+            toggleMenuBtn.addEventListener('click', function() {
+                leftMenu.classList.toggle('collapsed');
+                
+                const icon = toggleMenuBtn.querySelector('i');
+                if (leftMenu.classList.contains('collapsed')) {
+                    icon.classList.remove('fa-chevron-left');
+                    icon.classList.add('fa-chevron-right');
+                } else {
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-left');
+                }
+            });
+            
+            mobileMenuToggle.addEventListener('click', function() {
+                leftMenu.classList.toggle('visible');
+            });
+            
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768 && 
+                    !leftMenu.contains(event.target) && 
+                    event.target !== mobileMenuToggle && 
+                    !mobileMenuToggle.contains(event.target)) {
+                    leftMenu.classList.remove('visible');
+                }
+            });
+            
+            const menuLinks = document.querySelectorAll('.menu-link');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    menuLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    if (window.innerWidth <= 768) {
+                        leftMenu.classList.remove('visible');
+                    }
+                });
+            });
+            
+            handleResponsiveScaling();
+            
+            window.addEventListener('resize', debounce(function() {
+                handleResponsiveScaling();
+                
+                if (window.innerWidth > 768) {
+                    leftMenu.classList.remove('visible');
+                }
+            }, 100));
+        });
+    </script>
+</body>
+</html>
